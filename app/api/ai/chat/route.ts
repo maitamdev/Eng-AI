@@ -6,7 +6,7 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
   try {
-    const { messages, scenario, level } = await req.json();
+    const { messages, scenario, level, localTime } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
@@ -14,7 +14,8 @@ export async function POST(req: Request) {
 
     const systemPrompt = SYSTEM_PROMPTS.conversation(
       scenario || 'General Chat',
-      level || 'intermediate'
+      level || 'intermediate',
+      localTime
     );
 
     // Call Groq API with streaming

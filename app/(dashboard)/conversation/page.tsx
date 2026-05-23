@@ -115,6 +115,8 @@ export default function ConversationPage() {
         },
       ];
 
+      const localTime = new Date().toLocaleDateString('en-US', { weekday: 'long' }) + ', ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -122,6 +124,7 @@ export default function ConversationPage() {
           messages: initialMsgs,
           scenario: scenario.prompt,
           level: selectedLevel,
+          localTime,
         }),
       });
 
@@ -196,6 +199,8 @@ export default function ConversationPage() {
         content: m.content,
       }));
 
+      const localTime = new Date().toLocaleDateString('en-US', { weekday: 'long' }) + ', ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -203,6 +208,7 @@ export default function ConversationPage() {
           messages: apiMessages,
           scenario: selectedScenario?.prompt,
           level: selectedLevel,
+          localTime,
         }),
       });
 
@@ -251,7 +257,7 @@ export default function ConversationPage() {
 
   // Helper parser for custom blocks
   const cleanMessageContent = (text: string) => {
-    const blockIndex = text.indexOf('||CORRECTIONS||');
+    const blockIndex = text.indexOf('||');
     if (blockIndex !== -1) {
       return text.substring(0, blockIndex).trim();
     }
